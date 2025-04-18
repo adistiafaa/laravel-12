@@ -3,16 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class obat extends Model
+class Obat extends Model
 {
     protected $fillable = [
         'nama_obat',
         'kemasan',
-        'harga',
+        'harga'
     ];
 
-    public function periksa(){
-        return $this->belongsToMany(Periksa::class, 'detail_periksa', 'id_obat', 'id_periksa');
-     }
+        /**
+     * Relasi ke tabel DetailPeriksa
+     */
+    public function detailPeriksas(): HasMany
+    {
+        return $this->hasMany(DetailPeriksa::class, 'id_obat');
+    }
 }
