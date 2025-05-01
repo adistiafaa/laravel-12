@@ -97,11 +97,11 @@
                                     class="img-size-50 mr-3 img-circle">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
-                                        Sofa Ikhlas
+                                        Gunawan
                                         <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
                                     </h3>
-                                    <p class="text-sm">Info Mie Ayam</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    <p class="text-sm">Call me whenever you can...</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 8 Hours Ago</p>
                                 </div>
                             </div>
                             <!-- Message End -->
@@ -114,11 +114,11 @@
                                     class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
-                                        Wanda Jepara
+                                        Maesaroh
                                         <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
                                     </h3>
-                                    <p class="text-sm">Sorry telat, jepara macet</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    <p class="text-sm">I got your message bro</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 9 Hours Ago</p>
                                 </div>
                             </div>
                             <!-- Message End -->
@@ -131,12 +131,12 @@
                                     class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
-                                        Nadia Kalimantan
+                                        Siti Nurjanah
                                         <span class="float-right text-sm text-warning"><i
                                                 class="fas fa-star"></i></span>
                                     </h3>
-                                    <p class="text-sm">Ada bibit sawit 10 nih</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    <p class="text-sm">The subject goes here</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 10 Hours Ago</p>
                                 </div>
                             </div>
                             <!-- Message End -->
@@ -201,7 +201,7 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{ asset('lte/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2"
+                        <img src="{{ asset('lte/dist/img/avatar2.png') }}" class="img-circle elevation-2"
                             alt="User Image">
                     </div>
                     <div class="info">

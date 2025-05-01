@@ -1,66 +1,176 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sismenkes Bengkel Koding
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Repositori tugas bengkel koding website sismenkes dengan laravel.
 
-## About Laravel
+```
+Nama : Heryawan Eko Saputro
+NIM  : A11.2022.14237
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Cara menjalankan projek secara lokal
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Clone repositori:
+```bash
+git clone https://github.com/yourusername/RavaelaBkod.git
+cd RavaelaBkod
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+2. Install dependensi PHP:
+```bash
+composer install
+```
 
-## Learning Laravel
+3. Install dependensi node:
+```bash
+npm install
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+4. Setup environment lokal:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+5. Jalankan migrasi beserta seeder:
+```bash
+php artisan migrate --seed
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+6. Jalankan projek:
+```bash
+php artisan serve
+```
 
-## Laravel Sponsors
+## Route Documentation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Authentication Routes
+| Route | Controller | Middleware | Deskripsi |
+|-------|------------|------------|-----------|
+| /register | AuthController@showRegisterForm | - | Halaman register |
+| /register | AuthController@register | - | Redirect register |
+| /login | AuthController@showLoginForm | - | Halaman login |
+| /login | AuthController@login | - | Redirect login |
+| /logout | AuthController@logout | auth | Redirect logout |
 
-### Premium Partners
+### Doctor Routes
+| Route | Controller | Middleware | Description |
+|-------|------------|------------|-------------|
+| /dokter/dashboard | - | auth, role:dokter | Halaman dokter |
+| /dokter/obat | ObatController@index | auth, role:dokter | List obat |
+| /dokter/obat/create | ObatController@create | auth, role:dokter | Halaman tambah obat |
+| /dokter/obat | ObatController@store | auth, role:dokter | Simpan obat |
+| /dokter/obat/{id}/edit | ObatController@edit | auth, role:dokter | Halaman edit obat |
+| /dokter/obat/{id} | ObatController@update | auth, role:dokter | Update obat |
+| /dokter/obat/{id} | ObatController@destroy | auth, role:dokter | Hapus obat |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Patient Routes
+| URI | Controller | Middleware | Description |
+|-----|------------|------------|-------------|
+| /pasien/dashboard | - | auth, role:pasien | Patient dashboard |
 
-## Contributing
+## Penjelasan implementasi RBAC
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Role user
+- Terdefinisi di kode migrasi user:
+```php
+$table->enum('role', ['pasien', 'dokter'])->default('pasien');
+```
 
-## Code of Conduct
+2. Role Middleware
+- Terdefinisi in `bootstrap/app.php`:
+```php
+$middleware->alias([
+    'role' => \App\Http\Middleware\RoleMiddleware::class,
+]);
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. Proteksi Route
+- Route Dokter terhalangi dengan middleware `role:dokter`
+- Route Pasien terhalangi dengan middleware `role:pasien`
+- Dua duanya memerlukan otentikasi melalui middleware `auth`
 
-## Security Vulnerabilities
+4. User Model Relations
+```php
+// Relationship for patient's medical checks
+public function pasiens(): HasMany
+{
+    return $this->hasMany(Periksa::class, 'id_pasien');
+}
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+// Relationship for doctor's medical checks
+public function dokters(): HasMany
+{
+    return $this->hasMany(Periksa::class, 'id_dokter');
+}
+```
 
-## License
+### Testing RBAC
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Anda dapan memastikan apakah fungsi RBAC berfungsi atau tidak dengan:
+1. Login sebagai dokter - route /dokter/* dapat diakses tetapi route /pasien/* tidak dapat diakses
+2. Login sebagai pasien - route /pasien/* dapat diakses tetapi route /dokter/* tidak dapat diakses
+3. User ilegal - Otomatis redirect ke halaman login jika membuka halaman yang memerlukan login
+
+### Screenshot akses ditolak
+
+![Akses Ditolak - Dokter](TSS/T1.png)
+*Dokter ketika mencoba mengakses halaman pasien*
+
+## Skema Database & Model
+
+### File Migrasi
+
+1. Migrasi Detail Periksa
+![Migrasi Detail Periksa](TSS/tgA2.png)
+*Migrasi untuk tabel detail_periksas*
+
+2. Obat Migration
+![Obat Migration](TSS/tgA1.png)
+*Migrasi untuk tabel obats*
+
+### Model Files
+
+1. Model Periksa
+![Model Periksa](TSS/tgA3.png)
+*Implementasi model Periksa dengan relasinya*
+
+2. Model Detail Periksa  
+![Model Detail Periksa](TSS/tgA4.png)
+*Implementasi model DetailPeriksa dengan relasinya*
+
+3. Model Obat
+![Model Obat](TSS/tgA5.png)
+*Implementasi model Obat dengan relasinya*
+
+### Database Setup
+
+![Migrasi Sukes](TSS/tgA7.png)
+*Screenshot terminal menunjukkan migrasi database berhasil*
+
+## User Interface
+
+### Halaman Publik
+1. Landing Page
+![Landing Page](TSS/T2.png)
+*Halaman awal website yang dapat diakses publik*
+
+2. Halaman Login
+![Login Page](TSS/T3.png) 
+*Halaman login untuk dokter dan pasien*
+
+3. Halaman Register 
+![Register Page](TSS/T4.png)
+*Halaman pendaftaran untuk pasien baru*
+
+### Halaman Dokter
+1. Dashboard
+![Dashboard Dokter](TSS/T5.png)
+*Halaman dashboard untuk dokter*
+
+3. Daftar Obat  
+![List Obat](TSS/T6.png)
+*Halaman pengelolaan daftar obat*
+
+4. Form Tambah Obat
+![Add Medicine](TSS/T7.png)
+*Form untuk menambahkan obat baru*
